@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+research/cutouts/
+research/spike_results.json
+research/spike_aws.json
+research/spike2_*
+research/spike3_*
+research/lightcurve_cache_*.json
+.DS_Store
+Thumbs.db

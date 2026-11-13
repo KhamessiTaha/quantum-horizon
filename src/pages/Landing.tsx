@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
-import Badge from "../components/Badge.tsx";
 import SearchBox from "../components/SearchBox.tsx";
-import { FEATURED_TARGETS } from "../data/featuredTargets.ts";
+import { FEATURED_TARGETS, viewLink } from "../data/featuredTargets.ts";
+import { fetchFrames, imageUrl, type FramesResponse } from "../lib/api.ts";
+import { useAsync } from "../lib/useAsync.ts";
 import styles from "./Landing.module.css";
+
+const HERO_TARGET = { target: "Barnard's Star", ra: null, dec: null, detector: "D2", fovDeg: 0.06 };
 
 const STEPS = [
   {
@@ -23,6 +26,13 @@ const STEPS = [
 ];
 
 export default function Landing() {
+  const hero = useAsync<FramesResponse>((signal) => fetchFrames(HERO_TARGET, signal), "landing-hero");
+  const motion = hero.data?.measurement?.motion ?? null;
+  const strip = [
+    ...(hero.data?.passes.map((p) => ({ label: `Pass ${p.index} · ${p.mid_date}`, image: p.image })) ?? []),
+    ...(hero.data?.difference_image ? [{ label: "Difference", image: hero.data.difference_image }] : []),
+  ];
+
   return (
     <main>
       <section className={`container ${styles.hero}`}>
@@ -42,16 +52,31 @@ export default function Landing() {
         </div>
         <figure className={styles.heroFigure}>
           <div className={styles.strip}>
-            {["Pass 1", "Pass 2", "Pass 3", "Difference"].map((label) => (
-              <div key={label} className={styles.stripItem}>
-                <div className={styles.framePlaceholder} role="img" aria-label={`${label} image placeholder`} />
-                <span className="mono">{label}</span>
+            {(strip.length ? strip : [1, 2, 3, 4].map((n) => ({ label: "", image: "" , key: n }))).map((item, index) => (
+              <div key={item.label || index} className={styles.stripItem}>
+                {item.image ? (
+                  <img
+                    src={imageUrl(item.image)}
+                    alt={`Barnard's Star, ${item.label}`}
+                    className={styles.frameImage}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className={styles.framePlaceholder} role="img" aria-label="Loading a SPHEREx frame" />
+                )}
+                <span className="mono">{item.label || "loading"}</span>
               </div>
             ))}
           </div>
           <figcaption className={`panel ${styles.caption}`}>
-            <span>Featured target · detector 2 · three passes</span>
-            <span className="mono">Placeholder until the backend serves frames</span>
+            <span>Barnard's Star · detector 2 · {hero.data?.passes.length ?? 3} passes of real SPHEREx data</span>
+            <span className="mono">
+              {motion?.measured_arcsec
+                ? `measured ${motion.measured_arcsec.toFixed(2)} ± ${(motion.sigma_arcsec ?? 0).toFixed(2)}″ · catalog ${motion.predicted_arcsec?.toFixed(2)}″`
+                : hero.error
+                  ? "start the backend to load live frames"
+                  : "loading frames from the archive"}
+            </span>
           </figcaption>
         </figure>
       </section>
@@ -59,15 +84,18 @@ export default function Landing() {
       <section id="targets" className={`container ${styles.targets}`}>
         <div className={styles.sectionHead}>
           <h2>Start with a test target</h2>
-          <p>The five sources named in the challenge.</p>
+          <p>The five sources named in the challenge, each opening on the detector where it can actually be seen.</p>
         </div>
         <div className={styles.cards}>
           {FEATURED_TARGETS.map((t) => (
-            <Link key={t.slug} to={`/view?target=${encodeURIComponent(t.name)}`} className={`panel ${styles.card}`}>
+            <Link key={t.slug} to={viewLink(t)} className={`panel ${styles.card}`}>
               <span className={`mono ${styles.kind}`}>{t.kind}</span>
               <span className={styles.cardName}>{t.name}</span>
               <span className={styles.hook}>{t.hook}</span>
-              <Badge confidence="pending" />
+              <span className={styles.expect}>{t.expect}</span>
+              <span className={`mono ${styles.detector}`}>
+                opens on {t.detector} — {t.detectorReason}
+              </span>
             </Link>
           ))}
         </div>

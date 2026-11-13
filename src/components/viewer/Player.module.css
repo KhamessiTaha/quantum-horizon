@@ -80,8 +80,8 @@
 
 .frame {
   position: relative;
-  flex: 1 1 420px;
-  max-width: 600px;
+  flex: 1 1 460px;
+  max-width: 720px;
   aspect-ratio: 1;
   border-radius: var(--radius);
   border: 1px solid var(--line);
@@ -186,4 +186,106 @@
   margin-left: auto;
   font-size: 13px;
   color: var(--text-quiet);
+}
+
+.frame[data-loading="true"] {
+  border-color: var(--line-strong);
+}
+
+.frame[role="button"] {
+  cursor: crosshair;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  image-rendering: pixelated;
+  border-radius: var(--radius);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.overlay line,
+.overlay circle {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1.6px;
+}
+
+.scale {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: rgba(10, 12, 15, 0.82);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.working {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.clock {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-quiet);
+}
+
+.passControl {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.epochToggle {
+  width: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.epochToggle:hover {
+  color: var(--text);
+  border-color: var(--text-quiet);
+}
+
+.pairPick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.pairPick select {
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 7px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.speed input {
+  margin-right: 6px;
+  accent-color: var(--accent);
 }

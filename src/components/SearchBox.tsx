@@ -17,10 +17,14 @@ export default function SearchBox({ compact = false }: { compact?: boolean }) {
     const parsed = parseQuery(query);
     if (!parsed.target && parsed.ra === null) return;
     const next = toSearchParams({
+      ...current,
       ...parsed,
       fovDeg: compact ? current.fovDeg : FOV_LIMITS.defaultDeg,
       detector: compact ? current.detector : "D2",
       mode: "blink",
+      hidden: [],
+      pair: null,
+      pick: null,
     });
     navigate(`/view?${next.toString()}`);
   }

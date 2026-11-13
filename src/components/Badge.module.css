@@ -27,6 +27,7 @@
 }
 
 .not-measurable,
+.below-noise,
 .pending {
   color: var(--pending);
 }

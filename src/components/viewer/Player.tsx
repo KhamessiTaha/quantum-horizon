@@ -1,13 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { imageUrl, type FramesResponse } from "../../lib/api.ts";
 import { DETECTORS, FOV_LIMITS, type ViewState } from "../../lib/viewState.ts";
-import Timeline, { type TimelinePass } from "./Timeline.tsx";
+import Timeline from "./Timeline.tsx";
 import styles from "./Player.module.css";
-
-const PLACEHOLDER_PASSES: TimelinePass[] = [
-  { label: "Pass 1", start: 0.05, width: 0.03, frames: null },
-  { label: "Pass 2", start: 0.47, width: 0.03, frames: null },
-  { label: "Pass 3", start: 0.86, width: 0.05, frames: null },
-];
 
 const FRAME_MS = 900;
 const FOV_OPTIONS = [0.03, 0.06, 0.1, 0.2].filter((v) => v >= FOV_LIMITS.min && v <= FOV_LIMITS.max);
@@ -15,23 +10,93 @@ const FOV_OPTIONS = [0.03, 0.06, 0.1, 0.2].filter((v) => v >= FOV_LIMITS.min && 
 interface PlayerProps {
   view: ViewState;
   onChange: (patch: Partial<ViewState>) => void;
+  frames: FramesResponse | null;
+  loading: boolean;
+  error: string | null;
+  status: number | null;
+  elapsedMs: number;
+  differenceImage: string | null;
 }
 
-export default function Player({ view, onChange }: PlayerProps) {
-  const passes = PLACEHOLDER_PASSES;
+function waitingMessage(elapsedMs: number): string {
+  if (elapsedMs < 4000) return "Asking IRSA which SPHEREx images cover this position…";
+  if (elapsedMs < 20000) return "Reading just the pixels we need, straight from the SPHEREx mirror on AWS…";
+  if (elapsedMs < 60000) return "Masking bad pixels, removing the zodiacal light and aligning every frame…";
+  return "Still reading frames. A position is slow only the first time; after that it is served from the cache.";
+}
+
+export default function Player({
+  view,
+  onChange,
+  frames,
+  loading,
+  error,
+  status,
+  elapsedMs,
+  differenceImage,
+}: PlayerProps) {
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(true);
+  const stage = useRef<HTMLDivElement>(null);
+
+  const passes = frames?.passes ?? [];
+  const visible = passes.filter((p) => !view.hidden.includes(p.index));
   const blink = view.mode === "blink";
-  const isPlaying = playing && blink;
+  const isPlaying = playing && blink && visible.length > 1 && !loading;
+  const index = visible.length ? Math.min(current, visible.length - 1) : 0;
+  const shown = visible[index];
+  const measurements = frames?.measurement?.passes ?? [];
+  const pair: [number, number] = view.pair ?? [visible[0]?.index ?? 1, visible.at(-1)?.index ?? 1];
 
   useEffect(() => {
     if (!isPlaying) return;
-    const timer = window.setInterval(() => setCurrent((i) => (i + 1) % passes.length), FRAME_MS);
+    const timer = window.setInterval(() => setCurrent((i) => (i + 1) % visible.length), FRAME_MS);
     return () => window.clearInterval(timer);
-  }, [isPlaying, passes.length]);
+  }, [isPlaying, visible.length]);
 
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (!stage.current?.contains(document.activeElement) && document.activeElement !== document.body) return;
+      if (event.key === " ") {
+        event.preventDefault();
+        setPlaying((p) => !p);
+      } else if (event.key === "ArrowRight" && visible.length) {
+        setPlaying(false);
+        setCurrent((i) => (i + 1) % visible.length);
+      } else if (event.key === "ArrowLeft" && visible.length) {
+        setPlaying(false);
+        setCurrent((i) => (i - 1 + visible.length) % visible.length);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [visible.length]);
+
+  const grid = frames?.grid;
+  const image = blink ? (shown ? imageUrl(shown.image) : null) : differenceImage ? imageUrl(differenceImage) : null;
   const detector = DETECTORS.find((d) => d.id === view.detector) ?? DETECTORS[1];
-  const frameLabel = blink ? `${passes[current].label} · date pending` : `${passes.at(-1)?.label} − ${passes[0].label}`;
+
+  function pick(event: React.MouseEvent<HTMLDivElement>) {
+    if (!grid) return;
+    const box = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - box.left) / box.width) * grid.width_px - 0.5;
+    const y = ((event.clientY - box.top) / box.height) * grid.height_px - 0.5;
+    onChange({ pick: { x, y }, panel: "spectrum" });
+  }
+
+  function togglePass(passIndex: number) {
+    const hidden = view.hidden.includes(passIndex)
+      ? view.hidden.filter((i) => i !== passIndex)
+      : [...view.hidden, passIndex];
+    if (hidden.length >= passes.length) return;
+    onChange({ hidden: hidden.sort((a, b) => a - b) });
+  }
+
+  const frameLabel = blink
+    ? shown
+      ? `Pass ${shown.index} · ${shown.start}${shown.start === shown.end ? "" : ` to ${shown.end}`} · ${shown.frames_used} frames`
+      : "No pass selected"
+    : `Pass ${pair[1]} − pass ${pair[0]}`;
 
   return (
     <section aria-label="Image player" className={styles.player}>
@@ -58,8 +123,8 @@ export default function Player({ view, onChange }: PlayerProps) {
               type="button"
               className={`btn toggle mono ${styles.chip}`}
               aria-pressed={d.id === view.detector}
-              title={d.rangeMicron}
-              onClick={() => onChange({ detector: d.id })}
+              title={`${d.id}: ${d.rangeMicron}`}
+              onClick={() => onChange({ detector: d.id, pick: null })}
             >
               {d.id}
             </button>
@@ -67,7 +132,10 @@ export default function Player({ view, onChange }: PlayerProps) {
         </div>
         <label className={`mono ${styles.fov}`}>
           FOV
-          <select value={view.fovDeg} onChange={(e) => onChange({ fovDeg: Number(e.target.value) })}>
+          <select
+            value={view.fovDeg}
+            onChange={(e) => onChange({ fovDeg: Number(e.target.value), pick: null })}
+          >
             {FOV_OPTIONS.map((v) => (
               <option key={v} value={v}>
                 {v}°
@@ -78,13 +146,83 @@ export default function Player({ view, onChange }: PlayerProps) {
         </label>
       </div>
 
-      <div className={styles.stage}>
-        <div className={styles.frame} role="img" aria-label={`${frameLabel}, image placeholder`}>
-          <span className={`mono ${styles.frameLabel}`}>{frameLabel}</span>
-          <span className={`mono ${styles.compass}`} aria-hidden="true">
-            N ↑ E ←
-          </span>
-          <span className={styles.empty}>Frames appear here once the backend is connected</span>
+      <div className={styles.stage} ref={stage}>
+        <div
+          className={styles.frame}
+          data-loading={loading}
+          onClick={image ? pick : undefined}
+          role={image ? "button" : "img"}
+          tabIndex={image ? 0 : -1}
+          aria-label={image ? `${frameLabel}. Click a source to read its spectrum.` : frameLabel}
+        >
+          {image ? (
+            <>
+              <img src={image} alt="" className={styles.sky} draggable={false} />
+              {grid && view.overlay ? (
+                <svg
+                  className={styles.overlay}
+                  viewBox={`0 0 ${grid.width_px} ${grid.height_px}`}
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  {blink && shown?.predicted_px ? (
+                    <g stroke="var(--predicted)" strokeWidth={0.08} opacity={0.95}>
+                      <line
+                        x1={shown.predicted_px[0] + 0.5 - 1.6}
+                        y1={shown.predicted_px[1] + 0.5}
+                        x2={shown.predicted_px[0] + 0.5 - 0.6}
+                        y2={shown.predicted_px[1] + 0.5}
+                      />
+                      <line
+                        x1={shown.predicted_px[0] + 0.5 + 0.6}
+                        y1={shown.predicted_px[1] + 0.5}
+                        x2={shown.predicted_px[0] + 0.5 + 1.6}
+                        y2={shown.predicted_px[1] + 0.5}
+                      />
+                      <line
+                        x1={shown.predicted_px[0] + 0.5}
+                        y1={shown.predicted_px[1] + 0.5 - 1.6}
+                        x2={shown.predicted_px[0] + 0.5}
+                        y2={shown.predicted_px[1] + 0.5 - 0.6}
+                      />
+                      <line
+                        x1={shown.predicted_px[0] + 0.5}
+                        y1={shown.predicted_px[1] + 0.5 + 0.6}
+                        x2={shown.predicted_px[0] + 0.5}
+                        y2={shown.predicted_px[1] + 0.5 + 1.6}
+                      />
+                    </g>
+                  ) : null}
+                  {blink && shown ? renderMeasured(measurements, shown.index) : null}
+                  {!blink ? renderTrack(measurements, pair) : null}
+                  {view.pick ? (
+                    <circle
+                      cx={view.pick.x + 0.5}
+                      cy={view.pick.y + 0.5}
+                      r={1.6}
+                      fill="none"
+                      stroke="var(--text)"
+                      strokeWidth={0.07}
+                      strokeDasharray="0.4 0.3"
+                    />
+                  ) : null}
+                </svg>
+              ) : null}
+              <span className={`mono ${styles.frameLabel}`}>{frameLabel}</span>
+              <span className={`mono ${styles.compass}`} aria-hidden="true">
+                N ↑ E ←
+              </span>
+              <span className={`mono ${styles.scale}`} aria-hidden="true">
+                {grid ? `${(grid.fov_deg * 60).toFixed(1)}′ across · ${grid.pixel_arcsec}″ per pixel` : ""}
+              </span>
+              {loading ? <span className={styles.working}>Updating…</span> : null}
+            </>
+          ) : (
+            <span className={styles.empty}>
+              {error ? describeError(error, status) : loading ? waitingMessage(elapsedMs) : "Pick a target to begin."}
+              {loading ? <span className={`mono ${styles.clock}`}>{Math.round(elapsedMs / 1000)}s</span> : null}
+            </span>
+          )}
         </div>
         <div className={styles.legend}>
           {blink ? (
@@ -97,7 +235,10 @@ export default function Player({ view, onChange }: PlayerProps) {
                 <span className={styles.ringMark} aria-hidden="true" />
                 Measured in this pass
               </span>
-              <span>Each frame is the median of one detector's exposures in a pass, aligned to a common grid.</span>
+              <span>
+                Each frame is the median of one detector's exposures in a pass, aligned onto a common grid. Click a
+                source to read its spectrum.
+              </span>
             </>
           ) : (
             <>
@@ -110,6 +251,23 @@ export default function Player({ view, onChange }: PlayerProps) {
                 Fainter now: where it left
               </span>
               <span>Sources that did not move cancel out; a two-colour pair means motion.</span>
+              {passes.length > 2 ? (
+                <label className={`mono ${styles.pairPick}`}>
+                  Compare
+                  <select
+                    value={pair.join("-")}
+                    onChange={(e) => onChange({ pair: e.target.value.split("-").map(Number) as [number, number] })}
+                  >
+                    {passes.flatMap((a) =>
+                      passes.filter((b) => b.index > a.index).map((b) => (
+                        <option key={`${a.index}-${b.index}`} value={`${a.index}-${b.index}`}>
+                          pass {b.index} − pass {a.index}
+                        </option>
+                      )),
+                    )}
+                  </select>
+                </label>
+              ) : null}
             </>
           )}
         </div>
@@ -120,6 +278,7 @@ export default function Player({ view, onChange }: PlayerProps) {
           type="button"
           className={styles.play}
           aria-label={isPlaying ? "Pause" : "Play"}
+          disabled={!passes.length}
           onClick={() => {
             if (!blink) onChange({ mode: "blink" });
             setPlaying(!isPlaying);
@@ -135,25 +294,98 @@ export default function Player({ view, onChange }: PlayerProps) {
             </svg>
           )}
         </button>
-        {passes.map((p, i) => (
-          <button
-            key={p.label}
-            type="button"
-            className="btn toggle mono"
-            aria-pressed={blink && i === current}
-            onClick={() => {
-              setPlaying(false);
-              setCurrent(i);
-              if (!blink) onChange({ mode: "blink" });
-            }}
-          >
-            {p.label}
-          </button>
-        ))}
-        <span className={styles.speed}>{(FRAME_MS / 1000).toFixed(1)} s per pass</span>
+        {passes.map((p) => {
+          const hidden = view.hidden.includes(p.index);
+          const active = blink && !hidden && shown?.index === p.index;
+          return (
+            <span key={p.index} className={styles.passControl}>
+              <button
+                type="button"
+                className="btn toggle mono"
+                aria-pressed={active}
+                disabled={hidden}
+                title={`${p.start} to ${p.end}, ${p.frames_used} frames`}
+                onClick={() => {
+                  setPlaying(false);
+                  setCurrent(visible.findIndex((v) => v.index === p.index));
+                  if (!blink) onChange({ mode: "blink" });
+                }}
+              >
+                Pass {p.index}
+              </button>
+              <button
+                type="button"
+                className={styles.epochToggle}
+                aria-label={hidden ? `Add pass ${p.index}` : `Subtract pass ${p.index}`}
+                title={hidden ? "Add this epoch back" : "Subtract this epoch"}
+                onClick={() => togglePass(p.index)}
+              >
+                {hidden ? "+" : "−"}
+              </button>
+            </span>
+          );
+        })}
+        <label className={`mono ${styles.speed}`}>
+          <input
+            type="checkbox"
+            checked={view.overlay}
+            onChange={(e) => onChange({ overlay: e.target.checked })}
+          />
+          Overlays
+        </label>
       </div>
 
-      <Timeline passes={passes} current={blink ? current : null} />
+      <Timeline passes={passes} hidden={view.hidden} current={blink ? (shown?.index ?? null) : null} />
     </section>
   );
+}
+
+function renderMeasured(measurements: { index: number; measured_px: [number, number] | null }[], passIndex: number) {
+  const found = measurements.find((m) => m.index === passIndex);
+  if (!found?.measured_px) return null;
+  return (
+    <circle
+      cx={found.measured_px[0] + 0.5}
+      cy={found.measured_px[1] + 0.5}
+      r={1.9}
+      fill="none"
+      stroke="var(--accent)"
+      strokeWidth={0.1}
+    />
+  );
+}
+
+function renderTrack(
+  measurements: { index: number; measured_px: [number, number] | null }[],
+  pair: [number, number],
+) {
+  const a = measurements.find((m) => m.index === pair[0])?.measured_px;
+  const b = measurements.find((m) => m.index === pair[1])?.measured_px;
+  if (!a || !b) return null;
+  return (
+    <g>
+      <defs>
+        <marker id="qh-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4" markerHeight="4" orient="auto">
+          <path d="M0,1 L8,5 L0,9 z" fill="var(--measured)" />
+        </marker>
+      </defs>
+      <circle cx={a[0] + 0.5} cy={a[1] + 0.5} r={1.9} fill="none" stroke="var(--accent)" strokeWidth={0.1} />
+      <circle cx={b[0] + 0.5} cy={b[1] + 0.5} r={1.9} fill="none" stroke="var(--predicted)" strokeWidth={0.1} />
+      <line
+        x1={a[0] + 0.5}
+        y1={a[1] + 0.5}
+        x2={b[0] + 0.5}
+        y2={b[1] + 0.5}
+        stroke="var(--measured)"
+        strokeWidth={0.12}
+        markerEnd="url(#qh-arrow)"
+      />
+    </g>
+  );
+}
+
+function describeError(error: string, status: number | null): string {
+  if (status === 404) return error;
+  if (status === 503) return `${error} The archive is answering slowly or is down; cached targets still work.`;
+  return `Could not load this view. ${error}`;
 }

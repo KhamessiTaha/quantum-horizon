@@ -38,3 +38,49 @@
   line-height: 1.6;
   color: var(--text-quiet);
 }
+
+.panelTabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.side {
+  flex: 1 1 340px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.bannerStrong {
+  color: var(--text);
+}
+
+.analysis {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.analysisHint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-quiet);
+}
+
+.analysisHint strong {
+  color: var(--text-muted);
+  font-weight: 500;
+}

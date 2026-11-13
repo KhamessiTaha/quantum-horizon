@@ -96,3 +96,91 @@
 .qualityRow dd {
   margin: 0;
 }
+
+.fine {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-quiet);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-quiet);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.table td {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.table tbody tr[data-confidence="measured"] td:first-child {
+  border-left: 2px solid var(--measured);
+  padding-left: 6px;
+}
+
+.table tbody tr[data-confidence="marginal"] td:first-child {
+  border-left: 2px solid var(--marginal);
+  padding-left: 6px;
+}
+
+.table tbody tr[data-confidence="not-measurable"] td {
+  color: var(--text-quiet);
+}
+
+.rejected {
+  color: var(--text-quiet);
+}
+
+.flags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flags ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.flags code {
+  font-family: var(--font-mono);
+  color: var(--text);
+}
+
+.notes {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+}

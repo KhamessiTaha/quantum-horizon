@@ -1,11 +1,19 @@
 import styles from "./Badge.module.css";
 
-export type Confidence = "measured" | "marginal" | "not-measurable" | "indicative" | "candidate" | "pending";
+export type Confidence =
+  | "measured"
+  | "marginal"
+  | "not-measurable"
+  | "below-noise"
+  | "indicative"
+  | "candidate"
+  | "pending";
 
 const LABELS: Record<Confidence, string> = {
   measured: "Measured",
   marginal: "Marginal",
   "not-measurable": "Not measurable yet",
+  "below-noise": "Below the noise",
   indicative: "Indicative",
   candidate: "Unexplained candidate",
   pending: "Awaiting data",

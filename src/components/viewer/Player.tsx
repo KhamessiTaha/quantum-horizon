@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { imageUrl, type CatalogResponse, type FramesResponse } from "../../lib/api.ts";
+import { imageUrl, type CatalogResponse, type FramesResponse, type MoverCandidate } from "../../lib/api.ts";
 import { DETECTORS, FOV_LIMITS, type ViewState } from "../../lib/viewState.ts";
 import Timeline from "./Timeline.tsx";
 import styles from "./Player.module.css";
@@ -18,6 +18,8 @@ interface PlayerProps {
   differenceImage: string | null;
   catalog: CatalogResponse | null;
   catalogError: string | null;
+  movers: MoverCandidate[];
+  selectedMover: string | null;
 }
 
 function waitingMessage(elapsedMs: number): string {
@@ -38,6 +40,8 @@ export default function Player({
   differenceImage,
   catalog,
   catalogError,
+  movers,
+  selectedMover,
 }: PlayerProps) {
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(true);
@@ -200,6 +204,7 @@ export default function Player({
                   ) : null}
                   {blink && shown ? renderMeasured(measurements, shown.index) : null}
                   {!blink ? renderTrack(measurements, pair) : null}
+                  {movers.length ? renderMovers(movers, selectedMover) : null}
                   {view.pick ? (
                     <circle
                       cx={view.pick.x + 0.5}
@@ -352,6 +357,39 @@ export default function Player({
 
       <Timeline passes={passes} hidden={view.hidden} current={blink ? (shown?.index ?? null) : null} />
     </section>
+  );
+}
+
+function renderMovers(candidates: MoverCandidate[], selected: string | null) {
+  return (
+    <g>
+      {candidates.map((candidate) => {
+        const id = `${candidate.ra.toFixed(5)},${candidate.dec.toFixed(5)}`;
+        const points = Object.values(candidate.track_px);
+        if (points.length < 2) return null;
+        const active = selected === id;
+        const colour = candidate.label === "unexplained" ? "var(--accent)" : "var(--measured)";
+        return (
+          <g key={id} opacity={selected && !active ? 0.35 : 1}>
+            <polyline
+              points={points.map((p) => `${p[0] + 0.5},${p[1] + 0.5}`).join(" ")}
+              fill="none"
+              stroke={colour}
+              strokeWidth={0.1}
+              strokeDasharray={candidate.label === "known" ? "0.5 0.4" : undefined}
+            />
+            <circle
+              cx={points[0][0] + 0.5}
+              cy={points[0][1] + 0.5}
+              r={active ? 2.6 : 1.8}
+              fill="none"
+              stroke={colour}
+              strokeWidth={0.1}
+            />
+          </g>
+        );
+      })}
+    </g>
   );
 }
 

@@ -2,7 +2,7 @@ export type ViewMode = "blink" | "difference";
 
 export type DetectorId = "D1" | "D2" | "D3" | "D4" | "D5" | "D6";
 
-export type Panel = "findings" | "spectrum" | "brightness";
+export type Panel = "findings" | "spectrum" | "brightness" | "movers";
 
 export interface ViewState {
   target: string | null;
@@ -31,7 +31,7 @@ export const DETECTORS: { id: DetectorId; rangeMicron: string }[] = [
 export const FOV_LIMITS = { min: 0.03, max: 0.2, defaultDeg: 0.06 };
 
 const DETECTOR_IDS = new Set<string>(DETECTORS.map((d) => d.id));
-const PANELS = new Set<string>(["findings", "spectrum", "brightness"]);
+const PANELS = new Set<string>(["findings", "spectrum", "brightness", "movers"]);
 
 function parseNumber(value: string | null, min: number, max: number): number | null {
   if (value === null || value.trim() === "") return null;

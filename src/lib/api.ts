@@ -180,6 +180,35 @@ export interface CatalogResponse {
   elapsed_s: number;
 }
 
+export interface MoverCandidate {
+  label: "known" | "unexplained" | "unchecked";
+  explanation: string;
+  catalogue_match: string | null;
+  catalogue_g_mag: number | null;
+  speed_arcsec_per_year: number;
+  speed_error_arcsec_per_year: number;
+  catalogue_speed_arcsec_per_year: number | null;
+  position_angle_deg: number;
+  significance: number;
+  snr: number;
+  ra: number;
+  dec: number;
+  passes: number[];
+  track_px: Record<string, [number, number]>;
+}
+
+export interface MoversResponse {
+  target: Resolved;
+  detector: string;
+  candidates: MoverCandidate[];
+  catalogue: string;
+  searched: number;
+  rejected: Record<string, number>;
+  limit_arcsec_per_year: number | null;
+  notes: string[];
+  elapsed_s: number;
+}
+
 export interface FlagReference {
   bits: { bit: number; name: string; meaning: string | null; treatment: string }[];
   transient_rule: string;
@@ -264,6 +293,10 @@ export function fetchDifference(
 
 export function fetchCatalog(query: TargetQuery, signal?: AbortSignal): Promise<CatalogResponse> {
   return get<CatalogResponse>("/api/catalog", params(query), signal);
+}
+
+export function fetchMovers(query: TargetQuery, signal?: AbortSignal): Promise<MoversResponse> {
+  return get<MoversResponse>("/api/movers", params(query), signal);
 }
 
 export function fetchFlagReference(signal?: AbortSignal): Promise<FlagReference> {

@@ -227,3 +227,61 @@
   overflow: hidden;
   background: #050608;
 }
+
+.movers {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mover {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--bg-band);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.mover:hover {
+  border-color: var(--line-strong);
+}
+
+.mover[data-active="true"] {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.moverHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.moverTitle {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.moverSpeed {
+  font-size: 15px;
+}
+
+.moverQuiet {
+  font-size: 12px;
+  color: var(--text-quiet);
+}
+
+.moverWhy {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}

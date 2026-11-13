@@ -1,7 +1,8 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import FindingsPanel from "../components/viewer/FindingsPanel.tsx";
 import LightCurve from "../components/viewer/LightCurve.tsx";
+import Movers from "../components/viewer/Movers.tsx";
 import Player from "../components/viewer/Player.tsx";
 import ShareButtons from "../components/viewer/ShareButtons.tsx";
 import SkyContext from "../components/viewer/SkyContext.tsx";
@@ -9,11 +10,13 @@ import Spectrum from "../components/viewer/Spectrum.tsx";
 import {
   fetchCatalog,
   fetchDifference,
+  fetchMovers,
   fetchFrames,
   fetchLightCurve,
   fetchSpectrum,
   type CatalogResponse,
   type FramesResponse,
+  type MoversResponse,
   type LightCurveResponse,
   type SpectrumResponse,
 } from "../lib/api.ts";
@@ -25,6 +28,7 @@ const PANELS: { id: Panel; label: string }[] = [
   { id: "findings", label: "Image only" },
   { id: "spectrum", label: "Spectrum" },
   { id: "brightness", label: "Brightness" },
+  { id: "movers", label: "What moved" },
 ];
 
 export default function Viewer() {
@@ -56,6 +60,13 @@ export default function Viewer() {
     `${key}|gaia`,
     hasTarget && view.gaia && !frames.loading,
   );
+
+  const movers = useAsync<MoversResponse>(
+    (signal) => fetchMovers(query, signal),
+    `${key}|movers`,
+    hasTarget && view.panel === "movers" && !frames.loading,
+  );
+  const [selectedMover, setSelectedMover] = useState<string | null>(null);
 
   const pickKey = view.pick ? `${view.pick.x.toFixed(2)},${view.pick.y.toFixed(2)}` : "target";
   const spectrum = useAsync<SpectrumResponse>(
@@ -122,6 +133,8 @@ export default function Viewer() {
           differenceImage={difference.data?.image ?? frames.data?.difference_image ?? null}
           catalog={gaia.data}
           catalogError={gaia.error}
+          movers={view.panel === "movers" ? (movers.data?.candidates ?? []) : []}
+          selectedMover={selectedMover}
         />
         <FindingsPanel frames={frames.data} />
       </div>
@@ -159,6 +172,15 @@ export default function Viewer() {
             dec={frames.data.grid.dec}
             fovDeg={frames.data.grid.fov_deg}
             name={frames.data.target.name}
+          />
+        ) : null}
+        {view.panel === "movers" ? (
+          <Movers
+            data={movers.data}
+            loading={movers.loading}
+            error={movers.error}
+            selected={selectedMover}
+            onSelect={setSelectedMover}
           />
         ) : null}
         {view.panel === "findings" ? (

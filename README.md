@@ -14,6 +14,25 @@ Barnard's Star, detector 2, three passes between August 2025 and September 2026:
 > measured **9.71 ± 1.57″** of motion over 0.99 years, against a catalog prediction of **10.28″** — a 6.2σ detection of
 > a shift of 1.6 pixels.
 
+## Measured results
+
+Every figure below came out of this tool on real SPHEREx data, with the measurement method described in
+[`docs/`](docs/) and on the app's Methods page.
+
+| Target | Detector | Frames | Passes | Measured motion | Catalog | Verdict |
+|---|---|---|---|---|---|---|
+| Barnard's Star | D2 | 61 | 3 | 9.71 ± 1.57″ | 10.28″ | measured, agrees |
+| Barnard's Star | D1 | 60 | 3 | 10.31 ± 1.08″ | 10.08″ | measured, agrees — an independent detector |
+| Epsilon Indi B | D5 | 84 | 5 | 6.57 ± 0.62″ | 6.69″ | measured, agrees to 0.1″ |
+| WISE 0855−0714 | D6 | 45 | 3 | 11.27 ± 2.97″ | 7.97″ | consistent within the noise; the faint-source limit |
+| RW Aurigae | D1 | 56 | 3 | 0.36 ± 0.62″ | 0.02″ | correctly finds no motion |
+| R Draconis | D1 | 53 | 7 | 6.50 ± 8.95″ | 0.03″ | saturated: the uncertainty says so |
+
+Two of these matter more than the headline. **Barnard's Star measured independently on two detectors** agrees with
+itself and with the catalog, which no single measurement can show. And **the tool returns no motion for the two stars
+that are not moving**, with uncertainties large enough to cover the answer — a method that only ever finds motion is
+not measuring anything.
+
 ## What it does
 
 | The challenge asks for | Where it is |

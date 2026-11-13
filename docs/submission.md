@@ -65,6 +65,12 @@ catalog prediction with a significance, and graded: measured, marginal, below th
 3. *Wavelength.* SPHEREx changes wavelength between exposures of the same pass, so brightness is only compared inside
    narrow wavelength bands. Otherwise the filter's own change would masquerade as variability.
 
+**It agrees with itself.** Barnard's Star measured on detector 1 gives 10.31 ± 1.08 arcseconds and on detector 2
+gives 9.71 ± 1.57, against catalog predictions of 10.08 and 10.28 for those baselines — two independent measurements
+of the same star through different filters. Epsilon Indi B comes out at 6.57 ± 0.62 against a predicted 6.69, agreeing
+to a tenth of an arcsecond from 84 exposures across five passes. And the stars that are not moving return no motion:
+RW Aurigae measures 0.36 ± 0.62 arcseconds against a predicted 0.02.
+
 **Honesty as a feature.** Barnard's Star saturates the detector: its core carries no usable values. The tool refuses
 to report a light curve for it and explains why, while still measuring its position from the unsaturated wings. WISE
 0855 is at the edge of detectability and is labelled accordingly. A blank mover search is reported as a result, not

@@ -1,35 +1,35 @@
-# Quantum Horizon
+# qh-practice
 
-A public web tool for the NASA Space Apps 2026 challenge **Planet X and SPHEREx**. Enter a position on the sky and Quantum Horizon blinks every SPHEREx image of it across time, then measures what moved or changed and says how confident that measurement is.
+Practice scaffold for the Quantum Horizon frontend: placeholder screens only, no data. It exists to rehearse the setup before NASA Space Apps 2026. It is not the submission repo.
 
-## Status
+## Run
 
-Research phase. `research/` holds the feasibility scripts that tested the data path and the measurements on real SPHEREx data. The application is built during the hackathon, November 14–15, 2026.
-
-## Research scripts
-
-Python 3.12. From the `research/` folder:
+Requires Node 20 or newer.
 
 ```
-py -3.12 -m venv .venv
-.venv\Scripts\pip install -r requirements.txt
+npm install
+npm run dev
 ```
 
-On macOS or Linux, use `python3.12 -m venv .venv` and `.venv/bin/pip`.
+Open the address it prints (usually http://localhost:5173).
 
-| Script | What it does |
-| --- | --- |
-| `spike_query.py` | Resolves the five test targets with SIMBAD, propagates proper motion, and lists every SPHEREx image covering each one via IRSA TAP. Writes `spike_results.json`, which the others read. |
-| `spike_motion.py` | Downloads cutouts for one target and detector, aligns them on a common grid, stacks each pass, and compares measured motion with the catalog. |
-| `spike_aws.py` | Reads the same pixels directly from the `nasa-irsa-spherex` S3 mirror and times it against the cutout service. |
-| `spike_lightcurve.py` | Measures brightness and wavelength per frame from S3, builds light curves within wavelength bins, and flags saturation. |
+Other scripts: `npm run build` (type-check and production build), `npm run lint`, `npm run preview`.
 
-Run `spike_query.py` first. Example: `.venv\Scripts\python spike_motion.py --target barnard --detector 2`.
+## What is here
 
-## Data and credits
+- `/` landing page: pitch, search, five featured targets, how it works.
+- `/view` viewer: blink and difference modes, detector chips, field of view, play controls, timeline, findings panel, copy link and embed.
+- View state lives in the URL, for example `/view?target=Barnard's+Star&fov=0.06&det=D2&mode=blink` or `/view?ra=269.4463&dec=4.7682`.
+- Every value shown is a placeholder ("—", "Awaiting data") until a backend supplies real frames and measurements.
 
-- SPHEREx Quick Release images: NASA/JPL-Caltech/IPAC, via the [NASA/IPAC Infrared Science Archive](https://irsa.ipac.caltech.edu/Missions/spherex.html) and the [AWS Open Data registry](https://registry.opendata.aws/spherex-qr/).
-- Positions and proper motions: [SIMBAD](https://simbad.cds.unistra.fr/simbad/), CDS Strasbourg (Harvard mirror used as fallback).
-- Built with Astropy, astroquery, PyVO and reproject.
+## Layout
 
-Results are reported as measurements or candidates, never as discoveries.
+```
+src/
+  index.css               colour and type tokens, shared button styles
+  lib/viewState.ts        URL state: parse, serialise, validate
+  data/featuredTargets.ts the five challenge targets
+  components/             Header, SearchBox, Badge
+  components/viewer/      Player, Timeline, FindingsPanel, ShareButtons
+  pages/                  Landing, Viewer
+```

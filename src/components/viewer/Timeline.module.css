@@ -1,0 +1,57 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px 12px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.track {
+  position: relative;
+  height: 38px;
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.pass {
+  position: absolute;
+  bottom: 0;
+  height: 12px;
+  border-radius: 3px 3px 0 0;
+  background: #4a5563;
+}
+
+.pass[data-active="true"] {
+  background: var(--accent);
+}
+
+.passLabel {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.pass[data-active="true"] .passLabel {
+  color: var(--text);
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-quiet);
+}
+
+@media (max-width: 560px) {
+  .axis span:nth-child(2) {
+    display: none;
+  }
+}

@@ -1,0 +1,98 @@
+.aside {
+  flex: 1 1 340px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px;
+}
+
+.card h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.headline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.value {
+  font-size: 34px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.sub {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.compare > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 17px;
+}
+
+.term {
+  font-size: 12px;
+  color: var(--text-quiet);
+}
+
+.predicted {
+  color: var(--predicted);
+}
+
+.note {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.quality {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.qualityRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.qualityRow dt {
+  color: var(--text-quiet);
+}
+
+.qualityRow dd {
+  margin: 0;
+}

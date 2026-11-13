@@ -9,3 +9,7 @@ research/spike3_*
 research/lightcurve_cache_*.json
 .DS_Store
 Thumbs.db
+research/spike_movers_*.png
+research/spike_movers.json
+
+node_modules/

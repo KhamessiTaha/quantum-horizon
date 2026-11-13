@@ -1,0 +1,40 @@
+.badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.measured {
+  color: var(--measured);
+}
+
+.marginal {
+  color: var(--marginal);
+}
+
+.not-measurable,
+.pending {
+  color: var(--pending);
+}
+
+.indicative {
+  color: var(--indicative);
+}
+
+.candidate {
+  color: var(--accent);
+}

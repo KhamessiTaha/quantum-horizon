@@ -1,0 +1,209 @@
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 56px;
+  padding-block: 72px 56px;
+}
+
+.heroText {
+  flex: 1 1 460px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-quiet);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  margin: 0;
+  max-width: 560px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.heroFigure {
+  flex: 1 1 480px;
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.stripItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.framePlaceholder {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  border: 1px dashed var(--line-strong);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 15px, rgba(255, 255, 255, 0.03) 15px 16px),
+    repeating-linear-gradient(90deg, transparent 0 15px, rgba(255, 255, 255, 0.03) 15px 16px),
+    #050608;
+}
+
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.targets {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: 24px 56px;
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sectionHead h2,
+.how h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.sectionHead p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-quiet);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 188px;
+  padding: 18px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.kind {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-quiet);
+}
+
+.cardName {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.hook {
+  flex-grow: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.band {
+  border-block: 1px solid var(--line);
+  background: var(--bg-band);
+}
+
+.how {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-block: 56px;
+}
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+}
+
+.steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stepN {
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.stepTitle {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.stepBody {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 32px 48px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-quiet);
+}
+
+.footer p {
+  margin: 0;
+  max-width: 720px;
+}

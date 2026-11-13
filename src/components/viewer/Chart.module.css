@@ -219,3 +219,11 @@
   line-height: 1.6;
   color: var(--text);
 }
+
+.sky {
+  width: 100%;
+  height: 420px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #050608;
+}

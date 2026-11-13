@@ -285,7 +285,23 @@
   font-family: var(--font-mono);
 }
 
-.speed input {
+.toggles {
+  margin-left: auto;
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--text-quiet);
+}
+
+.toggles input {
   margin-right: 6px;
   accent-color: var(--accent);
+}
+
+.gaiaMark {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border: 1.5px dashed var(--text-quiet);
+  border-radius: 50%;
 }

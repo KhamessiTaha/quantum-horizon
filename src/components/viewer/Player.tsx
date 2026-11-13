@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { imageUrl, type FramesResponse } from "../../lib/api.ts";
+import { imageUrl, type CatalogResponse, type FramesResponse } from "../../lib/api.ts";
 import { DETECTORS, FOV_LIMITS, type ViewState } from "../../lib/viewState.ts";
 import Timeline from "./Timeline.tsx";
 import styles from "./Player.module.css";
@@ -16,6 +16,8 @@ interface PlayerProps {
   status: number | null;
   elapsedMs: number;
   differenceImage: string | null;
+  catalog: CatalogResponse | null;
+  catalogError: string | null;
 }
 
 function waitingMessage(elapsedMs: number): string {
@@ -34,6 +36,8 @@ export default function Player({
   status,
   elapsedMs,
   differenceImage,
+  catalog,
+  catalogError,
 }: PlayerProps) {
   const [current, setCurrent] = useState(0);
   const [playing, setPlaying] = useState(true);
@@ -165,6 +169,7 @@ export default function Player({
                   preserveAspectRatio="none"
                   aria-hidden="true"
                 >
+                  {view.gaia && shown ? renderCatalog(catalog, shown.index) : null}
                   {blink && shown?.predicted_px ? (
                     <g stroke="var(--predicted)" strokeWidth={0.08} opacity={0.95}>
                       <line
@@ -235,6 +240,14 @@ export default function Player({
                 <span className={styles.ringMark} aria-hidden="true" />
                 Measured in this pass
               </span>
+              {view.gaia ? (
+                <span className={styles.legendItem}>
+                  <span className={styles.gaiaMark} aria-hidden="true" />
+                  {catalogError
+                    ? `Gaia overlay unavailable: ${catalogError}`
+                    : `${catalog?.sources.length ?? 0} Gaia DR3 sources brighter than G ${catalog?.limit_mag ?? ""}, propagated to this pass`}
+                </span>
+              ) : null}
               <span>
                 Each frame is the median of one detector's exposures in a pass, aligned onto a common grid. Click a
                 source to read its spectrum.
@@ -325,18 +338,45 @@ export default function Player({
             </span>
           );
         })}
-        <label className={`mono ${styles.speed}`}>
-          <input
-            type="checkbox"
-            checked={view.overlay}
-            onChange={(e) => onChange({ overlay: e.target.checked })}
-          />
-          Overlays
-        </label>
+        <div className={styles.toggles}>
+          <label className="mono">
+            <input type="checkbox" checked={view.overlay} onChange={(e) => onChange({ overlay: e.target.checked })} />
+            Overlays
+          </label>
+          <label className="mono" title="Gaia DR3 sources, propagated to each pass date">
+            <input type="checkbox" checked={view.gaia} onChange={(e) => onChange({ gaia: e.target.checked })} />
+            Gaia DR3
+          </label>
+        </div>
       </div>
 
       <Timeline passes={passes} hidden={view.hidden} current={blink ? (shown?.index ?? null) : null} />
     </section>
+  );
+}
+
+function renderCatalog(catalog: CatalogResponse | null, passIndex: number) {
+  if (!catalog) return null;
+  return (
+    <g>
+      {catalog.sources.map((source) => {
+        const place = source.positions[String(passIndex)];
+        if (!place) return null;
+        const fast = source.pm_total_arcsec_per_year >= 0.5;
+        return (
+          <circle
+            key={source.source_id}
+            cx={place[0] + 0.5}
+            cy={place[1] + 0.5}
+            r={source.is_target ? 2.6 : 1.3}
+            fill="none"
+            stroke={fast ? "var(--measured)" : "var(--text-quiet)"}
+            strokeWidth={0.07}
+            strokeDasharray={source.is_target ? undefined : "0.35 0.3"}
+          />
+        );
+      })}
+    </g>
   );
 }
 

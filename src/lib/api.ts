@@ -164,6 +164,22 @@ export interface LightCurveResponse {
   elapsed_s: number;
 }
 
+export interface CatalogSource {
+  source_id: string;
+  g_mag: number | null;
+  pm_total_arcsec_per_year: number;
+  positions: Record<string, [number, number]>;
+  is_target: boolean;
+}
+
+export interface CatalogResponse {
+  provider: string;
+  limit_mag: number;
+  sources: CatalogSource[];
+  notes: string[];
+  elapsed_s: number;
+}
+
 export interface FlagReference {
   bits: { bit: number; name: string; meaning: string | null; treatment: string }[];
   transient_rule: string;
@@ -244,6 +260,10 @@ export function fetchDifference(
   signal?: AbortSignal,
 ): Promise<{ image: string }> {
   return get<{ image: string }>("/api/difference", params(query, { a, b }), signal);
+}
+
+export function fetchCatalog(query: TargetQuery, signal?: AbortSignal): Promise<CatalogResponse> {
+  return get<CatalogResponse>("/api/catalog", params(query), signal);
 }
 
 export function fetchFlagReference(signal?: AbortSignal): Promise<FlagReference> {

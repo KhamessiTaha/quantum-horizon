@@ -16,6 +16,7 @@ export interface ViewState {
   panel: Panel;
   pick: { x: number; y: number } | null;
   overlay: boolean;
+  gaia: boolean;
 }
 
 export const DETECTORS: { id: DetectorId; rangeMicron: string }[] = [
@@ -75,6 +76,7 @@ export function parseViewState(params: URLSearchParams): ViewState {
     panel: (PANELS.has(panel) ? panel : "findings") as Panel,
     pick: parsePick(params.get("pick")),
     overlay: params.get("overlay") !== "0",
+    gaia: params.get("gaia") === "1",
   };
 }
 
@@ -91,6 +93,7 @@ export function toSearchParams(state: ViewState): URLSearchParams {
   if (state.panel !== "findings") params.set("panel", state.panel);
   if (state.pick) params.set("pick", `${state.pick.x.toFixed(2)},${state.pick.y.toFixed(2)}`);
   if (!state.overlay) params.set("overlay", "0");
+  if (state.gaia) params.set("gaia", "1");
   return params;
 }
 

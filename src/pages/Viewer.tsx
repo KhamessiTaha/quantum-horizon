@@ -4,12 +4,15 @@ import FindingsPanel from "../components/viewer/FindingsPanel.tsx";
 import LightCurve from "../components/viewer/LightCurve.tsx";
 import Player from "../components/viewer/Player.tsx";
 import ShareButtons from "../components/viewer/ShareButtons.tsx";
+import SkyContext from "../components/viewer/SkyContext.tsx";
 import Spectrum from "../components/viewer/Spectrum.tsx";
 import {
+  fetchCatalog,
   fetchDifference,
   fetchFrames,
   fetchLightCurve,
   fetchSpectrum,
+  type CatalogResponse,
   type FramesResponse,
   type LightCurveResponse,
   type SpectrumResponse,
@@ -46,6 +49,12 @@ export default function Viewer() {
     (signal) => fetchDifference(query, Math.min(...pair), Math.max(...pair), signal),
     `${key}|diff|${pair.join("-")}`,
     wantDifference,
+  );
+
+  const gaia = useAsync<CatalogResponse>(
+    (signal) => fetchCatalog(query, signal),
+    `${key}|gaia`,
+    hasTarget && view.gaia && !frames.loading,
   );
 
   const pickKey = view.pick ? `${view.pick.x.toFixed(2)},${view.pick.y.toFixed(2)}` : "target";
@@ -111,6 +120,8 @@ export default function Viewer() {
           status={frames.status}
           elapsedMs={frames.elapsedMs}
           differenceImage={difference.data?.image ?? frames.data?.difference_image ?? null}
+          catalog={gaia.data}
+          catalogError={gaia.error}
         />
         <FindingsPanel frames={frames.data} />
       </div>
@@ -141,6 +152,14 @@ export default function Viewer() {
         ) : null}
         {view.panel === "brightness" ? (
           <LightCurve data={brightness.data} loading={brightness.loading} error={brightness.error} />
+        ) : null}
+        {frames.data ? (
+          <SkyContext
+            ra={frames.data.grid.ra}
+            dec={frames.data.grid.dec}
+            fovDeg={frames.data.grid.fov_deg}
+            name={frames.data.target.name}
+          />
         ) : null}
         {view.panel === "findings" ? (
           <p className={styles.analysisHint}>

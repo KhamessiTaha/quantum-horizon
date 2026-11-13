@@ -27,12 +27,16 @@ export default function Header() {
         {inViewer ? (
           <div className={styles.search}>
             <SearchBox compact key={queryKey} />
+            <Link to="/methods" className={styles.methodsLink}>
+              Methods
+            </Link>
           </div>
         ) : (
           <nav aria-label="Main" className={styles.nav}>
-            <a href="#targets">Featured targets</a>
-            <a href="#how">How it works</a>
-            <a href="#data">About the data</a>
+            <a href="/#targets">Featured targets</a>
+            <a href="/#how">How it works</a>
+            <Link to="/methods">Methods and limits</Link>
+            <a href="/#data">About the data</a>
           </nav>
         )}
       </div>

@@ -225,6 +225,8 @@ export default function Viewer() {
       </section>
 
       <footer className={styles.footer}>
+        <a href="/methods">How these numbers are measured, and where they stop</a>
+        <br />
         Images: NASA/JPL-Caltech/IPAC, SPHEREx Quick Release via IRSA. Positions and proper motions: SIMBAD and Gaia
         DR3. Pixels read from the SPHEREx public mirror on AWS Open Data.
       </footer>

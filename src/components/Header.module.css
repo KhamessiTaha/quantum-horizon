@@ -45,3 +45,15 @@
   flex: 1 1 320px;
   max-width: 560px;
 }
+
+.methodsLink {
+  flex: none;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.methodsLink:hover {
+  color: var(--text);
+}

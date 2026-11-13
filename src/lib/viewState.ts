@@ -17,6 +17,7 @@ export interface ViewState {
   pick: { x: number; y: number } | null;
   overlay: boolean;
   gaia: boolean;
+  embed: boolean;
 }
 
 export const DETECTORS: { id: DetectorId; rangeMicron: string }[] = [
@@ -77,6 +78,7 @@ export function parseViewState(params: URLSearchParams): ViewState {
     pick: parsePick(params.get("pick")),
     overlay: params.get("overlay") !== "0",
     gaia: params.get("gaia") === "1",
+    embed: params.get("embed") === "1",
   };
 }
 
@@ -94,6 +96,7 @@ export function toSearchParams(state: ViewState): URLSearchParams {
   if (state.pick) params.set("pick", `${state.pick.x.toFixed(2)},${state.pick.y.toFixed(2)}`);
   if (!state.overlay) params.set("overlay", "0");
   if (state.gaia) params.set("gaia", "1");
+  if (state.embed) params.set("embed", "1");
   return params;
 }
 

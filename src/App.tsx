@@ -1,12 +1,15 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useSearchParams } from "react-router-dom";
 import Header from "./components/Header.tsx";
 import Landing from "./pages/Landing.tsx";
 import Viewer from "./pages/Viewer.tsx";
 
 export default function App() {
+  const [params] = useSearchParams();
+  const embedded = params.get("embed") === "1";
+
   return (
     <>
-      <Header />
+      {embedded ? null : <Header />}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/view" element={<Viewer />} />

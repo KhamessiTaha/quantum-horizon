@@ -88,6 +88,39 @@ export default function Viewer() {
       ? `RA ${view.ra.toFixed(4)}° · Dec ${view.dec >= 0 ? "+" : ""}${view.dec.toFixed(4)}°`
       : "Search for a name, or paste coordinates";
 
+  if (view.embed) {
+    return (
+      <main className={`container ${styles.embed}`}>
+        <Player
+          view={view}
+          onChange={update}
+          frames={frames.data}
+          loading={frames.loading}
+          error={frames.error}
+          status={frames.status}
+          elapsedMs={frames.elapsedMs}
+          differenceImage={difference.data?.image ?? frames.data?.difference_image ?? null}
+          catalog={gaia.data}
+          catalogError={gaia.error}
+          movers={[]}
+          selectedMover={null}
+        />
+        <footer className={styles.embedFoot}>
+          <span>
+            <strong>{heading}</strong>
+            {frames.data?.measurement?.motion?.measured_arcsec
+              ? ` · moved ${frames.data.measurement.motion.measured_arcsec.toFixed(2)} ± ${(frames.data.measurement.motion.sigma_arcsec ?? 0).toFixed(2)}″ in ${frames.data.measurement.motion.baseline_years.toFixed(2)} yr`
+              : ""}
+          </span>
+          <a href={`/view?${toSearchParams({ ...view, embed: false }).toString()}`} target="_blank" rel="noreferrer">
+            Open in Quantum Horizon →
+          </a>
+          <span className={styles.embedCredit}>SPHEREx: NASA/JPL-Caltech/IPAC via IRSA</span>
+        </footer>
+      </main>
+    );
+  }
+
   return (
     <main className={`container ${styles.page}`}>
       <div className={styles.titleRow}>

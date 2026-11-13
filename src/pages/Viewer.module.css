@@ -84,3 +84,30 @@
   color: var(--text-muted);
   font-weight: 500;
 }
+
+.embed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-block: 14px 16px;
+  padding-inline: 14px;
+}
+
+.embedFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.embedFoot strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.embedCredit {
+  margin-left: auto;
+  color: var(--text-quiet);
+}

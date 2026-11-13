@@ -12,11 +12,14 @@ export default function ShareButtons() {
   }, [copied]);
 
   async function copy(kind: Exclude<Copied, null>) {
-    const url = window.location.href;
+    const url = new URL(window.location.href);
+    url.searchParams.delete("embed");
+    const link = url.toString();
+    url.searchParams.set("embed", "1");
     const text =
       kind === "link"
-        ? url
-        : `<iframe src="${url}" width="960" height="720" style="border:0" title="Quantum Horizon view" loading="lazy"></iframe>`;
+        ? link
+        : `<iframe src="${url.toString()}" width="760" height="640" style="border:0" title="Quantum Horizon view" loading="lazy"></iframe>`;
     try {
       await navigator.clipboard.writeText(text);
       setCopied(kind);

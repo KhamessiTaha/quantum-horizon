@@ -53,6 +53,13 @@
   flex-wrap: wrap;
 }
 
+@media (max-width: 560px) {
+  .panelTabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .side {
   flex: 1 1 340px;
   min-width: 0;

@@ -48,6 +48,5 @@ Warm the demo targets before any demo: `.venv\Scripts\python scripts/prewarm.py`
 
 ## Open work
 
-- Run every featured target once against live IRSA so the cache holds all five.
-- Deploy: backend container to Fly.io (`fly.toml`, region iad, volume at `/data`), frontend to Vercel.
-- Record the demo; the beat sheet is in `docs/demo.md`.
+See `HANDOFF.md` for the current state and the remaining steps in order: commit the warm cache, split into the two
+deploy repositories, deploy to Fly and Vercel, record the demo, submit.

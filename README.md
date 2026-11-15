@@ -24,8 +24,8 @@ Barnard's Star, detector 2, three passes between August 2025 and September 2026:
 
 ## Measured results
 
-Every figure below came out of this tool on real SPHEREx data, with the measurement method described in
-[`docs/`](docs/) and on the app's Methods page.
+Every figure below came out of this tool on real SPHEREx data. How each one is measured, and where the method stops,
+is on the app's [Methods page](https://quantum-horizon-web.vercel.app/methods).
 
 | Target | Detector | Frames | Passes | Measured motion | Catalog | Verdict |
 |---|---|---|---|---|---|---|

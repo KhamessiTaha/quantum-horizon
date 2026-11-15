@@ -127,10 +127,10 @@ export default function Landing() {
         <SkyMap
           ra={83.8221}
           dec={-5.3911}
-          viewDeg={1.2}
-          initialSurvey={1}
+          viewDeg={9}
+          initialSurvey={0}
           title="Explore the sky"
-          subtitle="Starting on the Orion Nebula. Amber names come from SIMBAD; drag to move, scroll to zoom."
+          subtitle="Orion in the infrared, as NASA’s WISE saw it. Scroll to zoom into anything, click it, and blink it with SPHEREx. Amber names come from SIMBAD."
         />
       </section>
 

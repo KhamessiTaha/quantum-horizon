@@ -253,3 +253,14 @@
   border-color: var(--accent);
   box-shadow: 0 0 0 1px var(--accent);
 }
+
+.exploreTabs {
+  display: flex;
+  gap: 8px;
+}
+
+.exploreLoading {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}

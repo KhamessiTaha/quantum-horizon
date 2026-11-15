@@ -72,6 +72,11 @@ Beyond the brief:
   parallaxes, coloured by spectral type and sized by catalog magnitude, against the 6,372 brightest stars of the real
   sky. Search or filter the list (brown dwarfs, red dwarfs, planet hosts, the challenge targets), fly to any object
   and blink it.
+- **A result: JPL's orbits checked against SPHEREx for 120 asteroids.** The 120 largest main-belt and near-Earth
+  asteroids were tracked through their SPHEREx exposures on detector 1. 117 were detected and measured; 116 of them sit
+  where NASA/JPL's orbit predicts within their uncertainty or one pixel, with a typical offset of 1.0″ (0.17 of a
+  SPHEREx pixel). The one exception, Fortuna, rests on three frames and is labelled marginal, not claimed as anything.
+  Every asteroid is listed on the results page with its offset, uncertainty and label, and links to its blink.
 - **Blink an asteroid or comet.** Any of the 7,533 bodies in the Solar System view can be tracked through every SPHEREx
   exposure that caught it; eleven, from Ceres and Vesta to Eros, are stored and open instantly. IRSA's Moving Object Search Tool lists the exposures and JPL Horizons predicts where each one should be;
   every frame is cut out around that prediction, so the asteroid holds still while the stars stream past. Its measured

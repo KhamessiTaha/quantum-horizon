@@ -72,11 +72,12 @@ Beyond the brief:
   parallaxes, coloured by spectral type and sized by catalog magnitude, against the 6,372 brightest stars of the real
   sky. Search or filter the list (brown dwarfs, red dwarfs, planet hosts, the challenge targets), fly to any object
   and blink it.
-- **Blink an asteroid.** Eleven asteroids, from Ceres and Vesta to Eros, blinked through every SPHEREx exposure that
-  caught them. IRSA's Moving Object Search Tool lists the exposures and JPL Horizons predicts where each one should be;
+- **Blink an asteroid or comet.** Any of the 7,533 bodies in the Solar System view can be tracked through every SPHEREx
+  exposure that caught it; eleven, from Ceres and Vesta to Eros, are stored and open instantly. IRSA's Moving Object Search Tool lists the exposures and JPL Horizons predicts where each one should be;
   every frame is cut out around that prediction, so the asteroid holds still while the stars stream past. Its measured
   offset from the prediction tests the orbit against SPHEREx, with an uncertainty and a label (bright asteroids saturate
-  SPHEREx, so most are indicative). The exposure lists ship with the API, so this works while IRSA is down.
+  SPHEREx, so most are indicative). A body only counts as seen if it stands out in the median of all frames stacked on
+  it, where the stars cancel; Sedna, at magnitude 21, is reported as not seen rather than matched to a passing star.
 - **The Solar System in 3D.** The eight planets from JPL's mean orbital elements and 7,533 real asteroids, comets and
   distant objects from JPL's Small-Body Database, each moved along its own orbit as time plays. Click any body to follow
   it: its card gives its orbit, where it sits in our sky on that date, how fast it crosses the sky in SPHEREx pixels,

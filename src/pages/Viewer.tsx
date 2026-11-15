@@ -137,7 +137,7 @@ export default function Viewer() {
           <h1>{heading}</h1>
           <p className="mono">{position}</p>
         </div>
-        <ShareButtons />
+        <ShareButtons frames={frames.data} />
       </div>
 
       {target && target.source !== "user coordinates" ? (

@@ -64,6 +64,10 @@ Beyond the brief:
 
 - **Measurements, not just pictures.** Motion, brightness and spectral change each come with an uncertainty and a
   confidence label: *measured*, *marginal*, *below the noise*, *not measurable yet*, or *indicative*.
+- **A colour view of the 102 bands.** Detectors 6, 3 and 1 become red, green and blue, matched pass by pass, so a
+  cold brown dwarf glows red and a hot star looks blue-white — and the colour image still blinks.
+- **Data you can take away.** Every view downloads as CSV or JSON with its measurements, every frame used, the flags
+  and a citation line.
 - **A sky map you can blink from.** WISE, 2MASS and DSS2 imagery with SIMBAD's best-known objects named on top. Click
   any star or any position and blink it; the blue square marks the SPHEREx field being measured.
 - **Difference imaging between any two passes**, not only first and last.

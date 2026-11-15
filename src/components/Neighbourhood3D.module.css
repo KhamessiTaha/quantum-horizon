@@ -302,3 +302,23 @@
     max-height: 360px;
   }
 }
+
+.readiness {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.readiness[data-ready="true"] {
+  color: var(--measured);
+}
+
+.readyTag {
+  flex: none;
+  padding: 1px 6px;
+  border: 1px solid var(--measured);
+  border-radius: 999px;
+  font-size: 10px;
+  color: var(--measured);
+}

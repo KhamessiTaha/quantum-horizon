@@ -34,7 +34,7 @@ rather than producing a number anyway.
 ## Link to project demo
 
 - 30-second video: https://www.youtube.com/watch?v=UU21SZwQQ0I
-- Seven-slide deck: *(deck link)*
+- Seven-slide deck: https://github.com/KhamessiTaha/quantum-horizon/blob/main/docs/quantum-horizon-slides.pdf
 
 ## Link to final project
 

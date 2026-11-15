@@ -3,11 +3,19 @@
 **Blink the infrared sky. Measure what moved.**
 
 In 1930 Pluto was found by comparing two photographs of the same patch of sky. Quantum Horizon does that with SPHEREx:
-give it a target name or a pair of coordinates, and it finds every SPHEREx exposure covering that position, aligns them
-onto one grid, plays them in time order, and then measures what moved or changed — with an uncertainty on every number
-and a plain label saying how far it can be trusted.
+give it a target name, a pair of coordinates, or a click on the sky map, and it finds every SPHEREx exposure covering
+that position, aligns them onto one grid, plays them in time order, and then measures what moved or changed — with an
+uncertainty on every number and a plain label saying how far it can be trusted.
 
 Built for NASA Space Apps 2026, challenge *Planet X and SPHEREx*.
+
+| | |
+|---|---|
+| **Live tool** | <https://quantum-horizon-web.vercel.app> |
+| **Live API** | <https://quantum-horizon-api.vercel.app/api/health> |
+| **Demo video (30 s)** | *(YouTube link)* |
+| **Slides (7)** | *(deck link)* |
+| **Source** | this repository — the whole project, its history and the research |
 
 Barnard's Star, detector 2, three passes between August 2025 and September 2026:
 
@@ -24,7 +32,7 @@ Every figure below came out of this tool on real SPHEREx data, with the measurem
 | Barnard's Star | D2 | 61 | 3 | 9.71 ± 1.57″ | 10.28″ | measured, agrees |
 | Barnard's Star | D1 | 60 | 3 | 10.31 ± 1.08″ | 10.08″ | measured, agrees — an independent detector |
 | Epsilon Indi B | D5 | 84 | 5 | 6.57 ± 0.62″ | 6.69″ | measured, agrees to 0.1″ |
-| WISE 0855−0714 | D6 | 45 | 3 | 11.27 ± 2.97″ | 7.97″ | consistent within the noise; the faint-source limit |
+| WISE 0855−0714 | D6 | 45 | 3 | 11.27 ± 2.97″ | 7.97″ | marginal: the faint-source limit |
 | RW Aurigae | D1 | 56 | 3 | 0.36 ± 0.62″ | 0.02″ | correctly finds no motion |
 | R Draconis | D1 | 53 | 7 | 6.50 ± 8.95″ | 0.03″ | saturated: the uncertainty says so |
 
@@ -33,18 +41,22 @@ itself and with the catalog, which no single measurement can show. And **the too
 that are not moving**, with uncertainties large enough to cover the answer — a method that only ever finds motion is
 not measuring anything.
 
+The sky map shows the same motion across a quarter of a century: SIMBAD's catalog label for Barnard's Star sits at its
+year-2000 position, WISE caught it about 2010 a little to the north, and the SPHEREx field being blinked today is
+further north again — about 10.3″ a year, 4.5′ since 2000.
+
 ## What it does
 
 | The challenge asks for | Where it is |
 |---|---|
-| Enter RA/Dec, and through the URL | Search box accepts a name or `RA Dec`; every setting lives in the URL (`/view?target=…&det=D2&fov=0.06&mode=difference&pair=1-3`) |
-| Fetch every SPHEREx image covering that spot | IRSA TAP finds them, and the pixels are read straight from the SPHEREx mirror on AWS Open Data |
+| Enter RA/Dec, and through the URL | The search box takes a name, decimal degrees (`269.4463 4.7682`) or sexagesimal (`17 57 48.5 +04 41 36`), with suggestions as you type; every setting lives in the URL (`/view?target=…&det=D2&fov=0.06&mode=difference&pair=1-3`) |
+| Fetch every SPHEREx image covering that spot | IRSA TAP finds them, with IRSA's SIA service as a fallback; the pixels are read straight from the SPHEREx mirror on AWS Open Data |
 | Play them as a time-ordered sequence | Blink player, one frame per pass, with keyboard control |
 | Choose the field of view | 0.03° to 0.2° |
 | Add and subtract epochs | Every pass can be dropped from the sequence and added back |
 | Per-detector stacking | D1–D6; each pass is the median of that detector's exposures, aligned first |
 | Spectra on the fly | Click any source: flux against wavelength, one line per pass |
-| Gaia and WISE overlays | Gaia DR3 sources propagated to each pass date; WISE, 2MASS and DSS2 imagery through Aladin Lite |
+| Gaia and WISE overlays | Gaia DR3 sources propagated to each pass date; an interactive sky map on WISE, 2MASS and DSS2 imagery |
 | Contamination flags | Every flag on the source, named and explained, with a stated policy for each |
 | Pick up new weekly data | The archive is queried per position, so a new release appears as soon as IRSA lists it |
 
@@ -52,11 +64,25 @@ Beyond the brief:
 
 - **Measurements, not just pictures.** Motion, brightness and spectral change each come with an uncertainty and a
   confidence label: *measured*, *marginal*, *below the noise*, *not measurable yet*, or *indicative*.
+- **A sky map you can blink from.** WISE, 2MASS and DSS2 imagery with SIMBAD's best-known objects named on top. Click
+  any star or any position and blink it; the blue square marks the SPHEREx field being measured.
 - **Difference imaging between any two passes**, not only first and last.
 - **A mover search.** Every source in the field is linked across passes and fitted; survivors are checked against Gaia
   DR3 and labelled a known moving star or an unexplained candidate.
 - **Honesty where the data runs out.** Barnard's Star saturates SPHEREx, so the tool refuses to report its brightness
   and says why, while still measuring its position from the unsaturated wings.
+
+## Repositories
+
+| Repository | What it is |
+|---|---|
+| [`quantum-horizon`](https://github.com/KhamessiTaha/quantum-horizon) | **This one: the project.** Frontend in `src/`, backend in `backend/`, research in `research/`, docs in `docs/`. All work happens here. |
+| [`quantum-horizon-web`](https://github.com/KhamessiTaha/quantum-horizon-web) | Deploy mirror of the frontend, which Vercel builds into the live tool. |
+| [`quantum-horizon-api`](https://github.com/KhamessiTaha/quantum-horizon-api) | Deploy mirror of `backend/` as its own root, which Vercel runs as the API. |
+
+The two mirrors carry the same history as this repository and exist only so each deployment builds from a root folder.
+Change code here, then bring it across: `git subtree split --prefix=backend` for the API, a merge from `main` for the
+web mirror.
 
 ## Running it
 
@@ -78,9 +104,11 @@ npm install
 npm run dev
 ```
 
-Then open <http://localhost:5173>. Point the frontend at another backend with `VITE_API_BASE`; see `.env.example`.
+Then open <http://localhost:5173>. In development the frontend talks to `http://localhost:8000`; point it at another
+backend with `VITE_API_BASE` (see `.env.example`). A production build uses the deployed API unless `VITE_API_BASE` says
+otherwise.
 
-Before any demo, warm the cache so nothing is fetched live:
+Before any demo, warm the cache so nothing is fetched live, from `backend/`:
 
 ```
 .venv\Scripts\python scripts/prewarm.py
@@ -89,21 +117,22 @@ Before any demo, warm the cache so nothing is fetched live:
 ## How it works
 
 ```
-IRSA TAP ──► which images cover this position (stored, so it survives an IRSA outage)
+IRSA TAP ──► which images cover this position — IRSA SIA if TAP does not answer; the list is stored either way
 AWS S3   ──► only the pixels we need from each image, in parallel, with the IRSA cutout service as fallback
              │
              ├─ mask unusable pixels, subtract the modelled zodiacal light
              ├─ reproject every frame onto one tangent-plane grid  ← this is what makes a 1.6 pixel shift visible
              └─ median-stack per detector, per pass
                    │
-                   ├─ PNG frames and difference images for the browser
+                   ├─ PNG frames and difference images, sent inside the response
                    ├─ positions fitted per frame and on the stack, uncertainty by leave-one-out jackknife
                    ├─ aperture photometry inside narrow wavelength bands
                    └─ source detection, track linking and a Gaia cross-match
 ```
 
-The aligned cube is cached on disk, so a position is slow once and instant afterwards; every endpoint — frames,
-measurements, spectrum, light curve, mover search — works from that one cached read.
+Every frame read is cached, so a position is slow once and instant afterwards; every endpoint — frames, measurements,
+spectrum, light curve, mover search — works from that one cached read. The five challenge targets ship with their
+pixels in `backend/cache/regions`, so the demo works even when the archive does not.
 
 ### Three things that decide whether the science is right
 
@@ -123,22 +152,29 @@ inside narrow wavelength bands.
 
 ## Deploying
 
-- Backend: `fly deploy` from `backend/` using `fly.toml` — region `iad`, a volume at `/data` so the cache survives
-  restarts. Add the frontend's origin to `QH_ALLOWED_ORIGINS` first.
-- Frontend: import the repo into Vercel (`vercel.json` is set up) and set `VITE_API_BASE` to the backend's URL.
+Both halves run on Vercel's free tier.
+
+- **API** — the `quantum-horizon-api` mirror, imported into Vercel. `pyproject.toml` names `api/index.py` as the
+  entry point, which copies the shipped cache to `/tmp` on a cold start; `vercel.json` gives the function 300 s.
+  Set `QH_ALLOWED_ORIGINS` to the frontend's address.
+- **Frontend** — the `quantum-horizon-web` mirror, imported into Vercel; `vercel.json` sets the build and the
+  single-page rewrite.
+
+`backend/Dockerfile` and `backend/fly.toml` still build a container with a persistent cache volume, for a host that
+keeps a disk between requests.
 
 ## Tests
 
 `python -m pytest` from `backend/`. They cover the pipeline end to end on synthetic SPHEREx-like files, the flag
-policy, the Gaia epoch propagation, and the mover search against fields with a planted mover, no mover, and a variable
-star that must not be mistaken for one.
+policy, the Gaia epoch propagation, the archive fallbacks, and the mover search against fields with a planted mover, no
+mover, and a variable star that must not be mistaken for one. `npm run build` and `npm run lint` check the frontend.
 
 ## Data and credits
 
-- SPHEREx Quick Release spectral images: NASA/JPL-Caltech/IPAC, via the NASA/IPAC Infrared Science Archive (IRSA) and
-  the SPHEREx mirror on AWS Open Data.
-- Positions and proper motions: SIMBAD (CDS, Strasbourg) and Gaia DR3 (ESA).
-- Context imagery: Aladin Lite (CDS) serving WISE, 2MASS and DSS2.
+- SPHEREx spectral images (Quick Releases QR2 and QR3, Data Release 1): NASA/JPL-Caltech/IPAC, via the NASA/IPAC
+  Infrared Science Archive (IRSA) and the SPHEREx mirror on AWS Open Data.
+- Positions and proper motions: SIMBAD (CDS, Strasbourg, with the Harvard mirror) and Gaia DR3 (ESA).
+- Sky-map imagery: WISE, 2MASS and DSS2 hierarchical surveys served by IRSA, shown with Aladin Lite (CDS).
 - Flag definitions: SPHEREx Explanatory Supplement and the IRSA Spectrophotometry Tool documentation.
 
 Results are labelled measurements or candidates, never discoveries.

@@ -68,6 +68,10 @@ Beyond the brief:
   cold brown dwarf glows red and a hot star looks blue-white — and the colour image still blinks.
 - **Data you can take away.** Every view downloads as CSV or JSON with its measurements, every frame used, the flags
   and a citation line.
+- **The Sun's neighbourhood in 3D.** 163 stars and brown dwarfs within about 7 parsecs, placed by their SIMBAD
+  parallaxes, coloured by spectral type and sized by catalog magnitude, against the 6,372 brightest stars of the real
+  sky. Search or filter the list (brown dwarfs, red dwarfs, planet hosts, the challenge targets), fly to any object
+  and blink it.
 - **A sky map you can blink from.** WISE, 2MASS and DSS2 imagery with SIMBAD's best-known objects named on top. Click
   any star or any position and blink it; the blue square marks the SPHEREx field being measured.
 - **Difference imaging between any two passes**, not only first and last.

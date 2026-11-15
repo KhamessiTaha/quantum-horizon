@@ -13,7 +13,7 @@ Built for NASA Space Apps 2026, challenge *Planet X and SPHEREx*.
 |---|---|
 | **Live tool** | <https://quantum-horizon-web.vercel.app> |
 | **Live API** | <https://quantum-horizon-api.vercel.app/api/health> |
-| **Demo video (30 s)** | *(YouTube link)* |
+| **Demo video (30 s)** | <https://www.youtube.com/watch?v=UU21SZwQQ0I> |
 | **Slides (7)** | *(deck link)* |
 | **Source** | this repository — the whole project, its history and the research |
 

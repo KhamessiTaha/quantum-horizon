@@ -33,7 +33,8 @@ rather than producing a number anyway.
 
 ## Link to project demo
 
-*(30-second video or seven-slide deck, hosted publicly — scripts below.)*
+- 30-second video: https://www.youtube.com/watch?v=UU21SZwQQ0I
+- Seven-slide deck: *(deck link)*
 
 ## Link to final project
 

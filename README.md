@@ -72,6 +72,11 @@ Beyond the brief:
   parallaxes, coloured by spectral type and sized by catalog magnitude, against the 6,372 brightest stars of the real
   sky. Search or filter the list (brown dwarfs, red dwarfs, planet hosts, the challenge targets), fly to any object
   and blink it.
+- **The Solar System in 3D.** The eight planets from JPL's mean orbital elements and 7,533 real asteroids, comets and
+  distant objects from JPL's Small-Body Database, each moved along its own orbit as time plays. Click any body to follow
+  it: its card gives its orbit, where it sits in our sky on that date, how fast it crosses the sky in SPHEREx pixels,
+  and a rotating impression. A "Planet Nine clues" view draws the 111 extreme trans-Neptunian orbits behind that
+  hypothesis. Sky positions agree with JPL Horizons to about an arcminute and are labelled indicative.
 - **A sky map you can blink from.** WISE, 2MASS and DSS2 imagery with SIMBAD's best-known objects named on top. Click
   any star or any position and blink it; the blue square marks the SPHEREx field being measured.
 - **Difference imaging between any two passes**, not only first and last.
@@ -182,6 +187,9 @@ mover, and a variable star that must not be mistaken for one. `npm run build` an
 - SPHEREx spectral images (Quick Releases QR2 and QR3, Data Release 1): NASA/JPL-Caltech/IPAC, via the NASA/IPAC
   Infrared Science Archive (IRSA) and the SPHEREx mirror on AWS Open Data.
 - Positions and proper motions: SIMBAD (CDS, Strasbourg, with the Harvard mirror) and Gaia DR3 (ESA).
+- Asteroid, comet and trans-Neptunian orbits: NASA/JPL Small-Body Database query API. Planet orbits: JPL's
+  "Keplerian Elements for Approximate Positions of the Major Planets" (E. M. Standish). The orbit code is adapted from
+  [CosmoArchitects](https://github.com/KhamessiTaha/CosmoArchitects), my NASA Space Apps 2024 orrery.
 - Sky-map imagery: WISE, 2MASS and DSS2 hierarchical surveys served by IRSA, shown with Aladin Lite (CDS).
 - Flag definitions: SPHEREx Explanatory Supplement and the IRSA Spectrophotometry Tool documentation.
 

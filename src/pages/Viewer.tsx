@@ -21,6 +21,7 @@ import {
   type SpectrumResponse,
 } from "../lib/api.ts";
 import { useAsync } from "../lib/useAsync.ts";
+import { useColour } from "../lib/useColour.ts";
 import { parseViewState, queryKey, targetQuery, toSearchParams, type Panel, type ViewState } from "../lib/viewState.ts";
 import styles from "./Viewer.module.css";
 
@@ -79,6 +80,8 @@ export default function Viewer() {
     `${key}|lc`,
     hasTarget && view.panel === "brightness" && !frames.loading,
   );
+
+  const colour = useColour(query, frames.data, view.colour && view.mode === "blink" && !!frames.data);
 
   const target = frames.data?.target;
   const heading = target?.name ?? view.target ?? (hasTarget ? "Custom position" : "No target selected");
@@ -175,6 +178,9 @@ export default function Viewer() {
             catalogError={gaia.error}
             movers={view.panel === "movers" ? (movers.data?.candidates ?? []) : []}
             selectedMover={selectedMover}
+            colourImages={colour.images}
+            colourLoading={colour.loading}
+            colourError={colour.error}
           />
 
           <section className={styles.analysis}>

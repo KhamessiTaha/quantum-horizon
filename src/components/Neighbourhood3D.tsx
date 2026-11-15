@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import Body3D from "./Body3D.tsx";
 import BRIGHT from "../data/brightstars.json";
 import NEIGHBOURS from "../data/neighbourhood.json";
 import {
@@ -430,6 +431,7 @@ export default function Neighbourhood3D() {
               </span>
               <strong className={styles.title}>{selected.name}</strong>
               <span className={`mono ${styles.id}`}>{selected.id}</span>
+              <Body3D kind={kind} id={selected.id} />
               <dl className={styles.facts}>
                 <div>
                   <dt>Distance</dt>

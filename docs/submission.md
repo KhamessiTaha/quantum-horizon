@@ -127,24 +127,23 @@ is in the public repository linked above, with its full commit history.
 
 ## 30-second demo video script
 
-Screen recording of the live tool, with an AI text-to-speech voice-over. About 70 words, read at a calm pace.
+A screen recording of the live tool on real SPHEREx data: eleven quick shots and an end card, with an AI
+text-to-speech voice-over and burned-in captions.
 
 | Time | On screen | Voice-over |
 |---|---|---|
-| 0:00–0:05 | Home page: the hero strip of three real Barnard's Star passes | "In 1930, Pluto was found by blinking two photographs of the same patch of sky." |
-| 0:05–0:10 | Click the search box, type "Barn", pick Barnard's Star from the suggestions | "Quantum Horizon does that with NASA's SPHEREx. Pick any star, and every exposure is found, aligned and blinked." |
-| 0:10–0:16 | The blink playing, amber cross and cyan ring visible | "Amber is where the catalog says the star should be. Cyan is where we measured it." |
-| 0:16–0:22 | Zoom on the Motion panel: 9.71 ± 1.57″, catalog 10.28″, Measured | "Nine point seven one arcseconds in a year, plus or minus one point six, against a catalog ten point three." |
-| 0:22–0:27 | Sky map tab, zoomed: amber SIMBAD label, bright WISE star, blue SPHEREx square | "And on the sky map, one star at three epochs: the year 2000, 2010, and today." |
-| 0:27–0:30 | End card: quantum-horizon-web.vercel.app | "Real measurements, with honest limits. Quantum Horizon." |
-
-Voice-over text, to paste into the text-to-speech tool as one block:
-
-> In 1930, Pluto was found by blinking two photographs of the same patch of sky. Quantum Horizon does that with
-> NASA's SPHEREx. Pick any star, and every exposure is found, aligned and blinked. Amber is where the catalog says the
-> star should be. Cyan is where we measured it. Nine point seven one arcseconds in a year, plus or minus one point six,
-> against a catalog ten point three. And on the sky map, one star at three epochs: the year 2000, 2010, and today.
-> Real measurements, with honest limits. Quantum Horizon.
+| 0:00 | Home page, the hero strip of three real Barnard's Star passes | "Pluto was found by blinking photos. We blink NASA's SPHEREx." |
+| 0:04 | Typing "Barn", picking Barnard's Star from the suggestions | "Type any star, or coordinates." |
+| 0:05 | The blink, with 26 Gaia DR3 stars circled | "Every exposure is aligned and blinked, with Gaia stars overlaid." |
+| 0:09 | Zoom on the Motion panel: 9.71 ± 1.57″ against 10.28″ | "It moved nine point seven arcseconds, plus or minus one point six. Catalog: ten point three." |
+| 0:14 | Difference image, pass 3 minus pass 1 | "Subtract any two passes." |
+| 0:16 | Switching detectors D1 to D5 | "Switch between six infrared detectors." |
+| 0:18 | Spectrum per pass | "Read a spectrum for every pass." |
+| 0:19 | RW Aurigae brightness: +121%, 12.5σ, labelled indicative | "Watch RW Aurigae brighten a hundred and twenty-one percent." |
+| 0:22 | Barnard's Star brightness: not measurable, saturated | "Where the data can't answer, it says so." |
+| 0:24 | Mover search on Epsilon Indi B | "Search the whole field for anything that moved." |
+| 0:26 | Sky map, labelled: 2000 catalog, ≈2010 WISE, 2025–26 SPHEREx | "On the sky map, one star at three epochs." |
+| 0:28 | End card: quantum-horizon-web.vercel.app | — |
 
 ## Seven-slide deck outline
 

@@ -202,6 +202,8 @@ mover, and a variable star that must not be mistaken for one. `npm run build` an
 - Asteroid, comet and trans-Neptunian orbits: NASA/JPL Small-Body Database query API. Planet orbits: JPL's
   "Keplerian Elements for Approximate Positions of the Major Planets" (E. M. Standish). The orbit code is adapted from
   [CosmoArchitects](https://github.com/KhamessiTaha/CosmoArchitects), my NASA Space Apps 2024 orrery.
+- 3D rendering: three.js. The simplex-noise shader that textures the star, planet and asteroid impressions is
+  [webgl-noise](https://github.com/ashima/webgl-noise) by Ashima Arts and Stefan Gustavson (MIT licence).
 - Sky-map imagery: WISE, 2MASS and DSS2 hierarchical surveys served by IRSA, shown with Aladin Lite (CDS).
 - Flag definitions: SPHEREx Explanatory Supplement and the IRSA Spectrophotometry Tool documentation.
 

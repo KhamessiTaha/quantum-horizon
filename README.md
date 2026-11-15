@@ -72,6 +72,11 @@ Beyond the brief:
   parallaxes, coloured by spectral type and sized by catalog magnitude, against the 6,372 brightest stars of the real
   sky. Search or filter the list (brown dwarfs, red dwarfs, planet hosts, the challenge targets), fly to any object
   and blink it.
+- **Blink an asteroid.** Eleven asteroids, from Ceres and Vesta to Eros, blinked through every SPHEREx exposure that
+  caught them. IRSA's Moving Object Search Tool lists the exposures and JPL Horizons predicts where each one should be;
+  every frame is cut out around that prediction, so the asteroid holds still while the stars stream past. Its measured
+  offset from the prediction tests the orbit against SPHEREx, with an uncertainty and a label (bright asteroids saturate
+  SPHEREx, so most are indicative). The exposure lists ship with the API, so this works while IRSA is down.
 - **The Solar System in 3D.** The eight planets from JPL's mean orbital elements and 7,533 real asteroids, comets and
   distant objects from JPL's Small-Body Database, each moved along its own orbit as time plays. Click any body to follow
   it: its card gives its orbit, where it sits in our sky on that date, how fast it crosses the sky in SPHEREx pixels,
@@ -187,6 +192,7 @@ mover, and a variable star that must not be mistaken for one. `npm run build` an
 - SPHEREx spectral images (Quick Releases QR2 and QR3, Data Release 1): NASA/JPL-Caltech/IPAC, via the NASA/IPAC
   Infrared Science Archive (IRSA) and the SPHEREx mirror on AWS Open Data.
 - Positions and proper motions: SIMBAD (CDS, Strasbourg, with the Harvard mirror) and Gaia DR3 (ESA).
+- Asteroid exposures and predicted positions: IRSA Moving Object Search Tool (MOST), with JPL Horizons ephemerides.
 - Asteroid, comet and trans-Neptunian orbits: NASA/JPL Small-Body Database query API. Planet orbits: JPL's
   "Keplerian Elements for Approximate Positions of the Major Planets" (E. M. Standish). The orbit code is adapted from
   [CosmoArchitects](https://github.com/KhamessiTaha/CosmoArchitects), my NASA Space Apps 2024 orrery.
